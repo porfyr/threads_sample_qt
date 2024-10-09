@@ -9,6 +9,10 @@
 #include <QListWidget>
 #include <QTimer>
 
+#include "numbergenerator.h"
+#include "numberqueue.h"
+#include "numberconsumer.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -26,6 +30,13 @@ public:
 private:
     Ui::MainWindow *ui;
     QTimer *refreshTimer;
+
+    NumberGenerator *generatorThread;
+    NumberQueue *queueThread;
+    NumberConsumer *consumerThread;
+
+    bool isGeneratorRunning = false;
+    bool isConsumerRunning = false;
 
 private slots:
     void updateLists();

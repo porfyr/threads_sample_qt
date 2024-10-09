@@ -1,41 +1,29 @@
-// #include <QThread>
-// #include <QMutex>
-// #include <QWaitCondition>
+#include "NumberGenerator.h"
+#include <QMutexLocker>
 
-// #include "numbergenerator.h"
+// NumberGenerator::NumberGenerator(QObject *parent) : QThread(parent), running(false), currentNumber(0) {}
 
+void NumberGenerator::run() {
+    while (running) {
+        QMutexLocker locker(&mutex);
+        currentNumber++;
+        emit numberGenerated(currentNumber);
+        QThread::msleep(1000);  // 1 second delay between number generation
+    }
+}
 
-// class NumberGenerator : public QThread {
-//     Q_OBJECT
+void NumberGenerator::startGenerating() {
+    QMutexLocker locker(&mutex);
+    running = true;
+    if (!isRunning()) start();
+}
 
-// public:
-//     NumberGenerator(QObject *parent = nullptr) : QThread(parent), running(false), currentNumber(0) {}
+void NumberGenerator::stopGenerating() {
+    QMutexLocker locker(&mutex);
+    running = false;
+}
 
-//     void run() override {
-//         while (running) {
-//             QMutexLocker locker(&mutex);
-//             currentNumber++;
-//             emit numberGenerated(currentNumber);
-//             QThread::msleep(1000);  // Sleep for 1 second
-//         }
-//     }
-
-//     void startGenerating() {
-//         QMutexLocker locker(&mutex);
-//         running = true;
-//         if (!isRunning()) start();
-//     }
-
-//     void stopGenerating() {
-//         QMutexLocker locker(&mutex);
-//         running = false;
-//     }
-
-// signals:
-//     void numberGenerated(int number);
-
-// private:
-//     bool running;
-//     int currentNumber;
-//     QMutex mutex;
-// };
+int NumberGenerator::getCurrentNumber() {
+    QMutexLocker locker(&mutex);
+    return currentNumber;
+}

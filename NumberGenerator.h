@@ -11,25 +11,13 @@ class NumberGenerator : public QThread {
 public:
     NumberGenerator(QObject *parent = nullptr) : QThread(parent), running(false), currentNumber(0) {}
 
-    void run() override {
-        while (running) {
-            QMutexLocker locker(&mutex);
-            currentNumber++;
-            emit numberGenerated(currentNumber);
-            QThread::msleep(1000);  // Sleep for 1 second
-        }
-    }
+    void run() override;
 
-    void startGenerating() {
-        QMutexLocker locker(&mutex);
-        running = true;
-        if (!isRunning()) start();
-    }
+    void startGenerating();
 
-    void stopGenerating() {
-        QMutexLocker locker(&mutex);
-        running = false;
-    }
+    void stopGenerating();
+
+    int getCurrentNumber();
 
 signals:
     void numberGenerated(int number);

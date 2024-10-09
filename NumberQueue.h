@@ -11,22 +11,11 @@ class NumberQueue : public QThread {
 public:
     NumberQueue(QObject *parent = nullptr) : QThread(parent) {}
 
-    void addNumber(int number) {
-        QMutexLocker locker(&mutex);
-        if (queue.size() >= 20) {
-            queue.pop();  // Remove the oldest number
-        }
-        queue.push(number);
-        emit queueUpdated();
-    }
+    void addNumber(int number);
 
-    int getNextNumber() {
-        QMutexLocker locker(&mutex);
-        if (queue.empty()) return -1;
-        int number = queue.front();
-        queue.pop();
-        return number;
-    }
+    std::vector<int> getQueue();
+
+    int getNextNumber();
 
 signals:
     void queueUpdated();
