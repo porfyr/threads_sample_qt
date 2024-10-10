@@ -4,13 +4,24 @@
 #include <QThread>
 #include <QMutex>
 #include <QWaitCondition>
+#include <QDebug>
+
 
 class NumberGenerator : public QThread {
     Q_OBJECT
 
 public:
-    NumberGenerator(QObject *parent = nullptr) : QThread(parent), running(false), currentNumber(0) {}
+    NumberGenerator(QObject *parent);
 
+    // void run() override;
+
+    // void startGenerating();
+
+    // void stopGenerating();
+
+    // int getCurrentNumber();
+
+public slots:
     void run() override;
 
     void startGenerating();

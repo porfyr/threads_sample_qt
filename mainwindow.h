@@ -9,9 +9,9 @@
 #include <QListWidget>
 #include <QTimer>
 
-#include "numbergenerator.h"
-#include "numberqueue.h"
-#include "numberconsumer.h"
+#include "NumberGenerator.h"
+#include "NumberQueue.h"
+#include "NumberConsumer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

@@ -4,18 +4,28 @@
 #include <queue>
 #include <QThread>
 #include <QMutex>
+#include <QDebug>
+
 
 class NumberQueue : public QThread {
     Q_OBJECT
 
 public:
-    NumberQueue(QObject *parent = nullptr) : QThread(parent) {}
+    NumberQueue(QObject *parent);
 
+    // void addNumber(int number);
+
+    // std::vector<int> getQueue();
+
+    // int getNextNumber();
+
+public slots:
     void addNumber(int number);
 
     std::vector<int> getQueue();
 
     int getNextNumber();
+
 
 signals:
     void queueUpdated();

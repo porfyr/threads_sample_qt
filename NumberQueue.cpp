@@ -1,13 +1,18 @@
 #include "NumberQueue.h"
+#include "defs.h"
 
-// NumberQueue::NumberQueue(QObject *parent) : QThread(parent) {}
+NumberQueue::NumberQueue(QObject *parent)
+    : QThread(parent) {}
 
 void NumberQueue::addNumber(int number) {
+    qDebug() << "called NumberQueue::addNumber(" << number << ")";
     QMutexLocker locker(&mutex);
     if (queue.size() >= 20) {
         queue.pop();  // Remove the oldest number
     }
     queue.push(number);
+    locker.unlock();
+    qDebug() << "q pushed";
     emit queueUpdated();
 }
 
@@ -25,9 +30,11 @@ std::vector<int> NumberQueue::getQueue() {
 }
 
 int NumberQueue::getNextNumber() {
+    qDebug() << "called NQ::getNextNumber()";
     QMutexLocker locker(&mutex);
     if (queue.empty()) return -1;
     int number = queue.front();
+    // locker.unlock();
     queue.pop();
 
     return number;

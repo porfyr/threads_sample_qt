@@ -1,14 +1,19 @@
-#include "NumberGenerator.h"
 #include <QMutexLocker>
 
-// NumberGenerator::NumberGenerator(QObject *parent) : QThread(parent), running(false), currentNumber(0) {}
+#include "NumberGenerator.h"
+#include "defs.h"
+
+NumberGenerator::NumberGenerator(QObject *parent)
+    : QThread(parent), running(false), currentNumber(0) {}
 
 void NumberGenerator::run() {
+    // qDebug() << "started NumberGenerator::run()";
     while (running) {
         QMutexLocker locker(&mutex);
         currentNumber++;
+        locker.unlock();
         emit numberGenerated(currentNumber);
-        QThread::msleep(1000);  // 1 second delay between number generation
+        QThread::msleep(UPDATE_PERIOD);
     }
 }
 

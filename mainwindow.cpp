@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
+#include "defs.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,14 +21,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     refreshTimer = new QTimer(this);
     connect(refreshTimer, &QTimer::timeout, this, &MainWindow::updateLists);
-    refreshTimer->start(333);
+    refreshTimer->start(UPDATE_PERIOD);
 }
 
 void MainWindow::toggleThread1() {
+    qDebug() << "pressed toggle thread 1";
     if (isGeneratorRunning) {
         generatorThread->stopGenerating();
         ui->button_1->setText("Start thread 1");
     } else {
+        // qDebug() << "gen isn't running";
         generatorThread->startGenerating();
         ui->button_1->setText("Stop thread 1");
     }
@@ -35,6 +38,7 @@ void MainWindow::toggleThread1() {
 }
 
 void MainWindow::toggleThread3() {
+    qDebug() << "pressed toggle thread 3";
     if (isConsumerRunning) {
         consumerThread->stopConsuming();
         ui->button_3->setText("Start thread 3");
@@ -53,12 +57,14 @@ void MainWindow::updateLists() {
 
     // Add numbers from generator and queue to the lists
     ui->listWidget_1->addItem(QString::number(generatorThread->getCurrentNumber()));
-    for (auto &num : queueThread->getQueue()) {
-        ui->listWidget_2->addItem(QString::number(num));
+    std::vector<int> queue = queueThread->getQueue();
+    for (auto &queue_num : queue) {
+        ui->listWidget_2->addItem(QString::number(queue_num));
     }
-
-    // Since the consumer thread doesn't generate numbers but consumes them,
-    // it can be updated based on queue changes or add it in NumberConsumer class
+    int consumedNumber = consumerThread->getConsumedNumber();
+    if (consumedNumber != -1)
+        ui->listWidget_3->addItem(QString::number(consumedNumber));
+    qDebug() << "ui list updated";
 }
 
 MainWindow::~MainWindow()

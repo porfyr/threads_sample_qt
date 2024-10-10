@@ -19,7 +19,8 @@ HEADERS += \
     MainWindow.h \
     NumberConsumer.h \
     NumberGenerator.h \
-    NumberQueue.h
+    NumberQueue.h \
+    defs.h
 
 FORMS += \
     MainWindow.ui
